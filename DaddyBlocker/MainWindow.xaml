@@ -1,0 +1,73 @@
+﻿<Window x:Class="DaddyBlocker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DaddyBlocker 2026" Height="750" Width="1050" Background="#0A0A0A" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#151515" CornerRadius="0,15,15,0" BorderBrush="#333" BorderThickness="0,0,1,0">
+            <StackPanel Margin="20">
+                <TextBlock Text="PRESETS" Foreground="#666" FontSize="10" FontWeight="Bold" Margin="0,0,0,15"/>
+                <Button x:Name="BtnGaming" Content="🎮 GAMING PRO" Click="Preset_Click" Margin="0,5" Height="40" Background="#222" Foreground="Cyan"/>
+                <Button x:Name="BtnLight" Content="⚡ LIGHT DEPLOY" Click="LightPreset_Click" Margin="0,5" Height="40" Background="#222" Foreground="#FFD700"/>
+                <Button x:Name="BtnDefault" Content="🛡️ DEFAULT" Click="Preset_Click" Margin="0,5" Height="40" Background="#222" Foreground="White"/>
+                <Separator Margin="0,20" Background="#333"/>
+                <Button Content="💾 SAVE SETUP" Click="SaveSettings_Click" Background="#222" Foreground="Cyan" Margin="0,0,0,10" Height="40"/>
+                <Button Content="♻️ RESET FIREWALL" Click="StopShield_Click" Background="Transparent" Foreground="#FF4444" BorderBrush="#442222" Height="35"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Column="1" Margin="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="DADDYBLOCKER" Foreground="Cyan" FontSize="28" FontWeight="ExtraBold"/>
+                <TextBlock x:Name="StatusLabel" Text="Status: Daddy is Waiting..." Foreground="Gray" Margin="0,5,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Margin="0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.3*"/>
+                    <ColumnDefinition Width="1.2*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                    <TextBlock Text="GEO-BLOCKING" Foreground="White" Margin="0,0,0,5" FontWeight="Bold"/>
+                    <ListBox x:Name="CountryListBox" SelectionMode="Multiple" Height="320" Background="#111" Foreground="White" BorderBrush="#333"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                    <TextBlock Text="BLOCKLIST FEEDS" Foreground="#FF5555" Margin="0,0,0,5" FontWeight="Bold"/>
+                    <Button Content="🚀 SUBSCRIBE TO ALL" Click="AddAllFeeds_Click" Margin="0,0,0,10" Height="35" Background="#331111" Foreground="Yellow" FontWeight="Bold"/>
+
+                    <Button Content="+ Malicious (Marcoux) - Will take a while" Click="AddFeed_Click" Tag="https://raw.githubusercontent.com/romainmarcoux/malicious-ip/main/full-aa.txt" Margin="0,0,0,5" Height="28" Background="#1A1111" Foreground="OrangeRed"/>
+                    <Button Content="+ Feodo C2 (Light)" Click="AddFeed_Click" Tag="https://feodotracker.abuse.ch/downloads/ipblocklist.txt" Margin="0,0,0,5" Height="28" Background="#1A1111" Foreground="OrangeRed"/>
+                    <Button Content="+ IPsum L1 (Light)" Click="AddFeed_Click" Tag="https://raw.githubusercontent.com/stamparm/ipsum/master/levels/1.txt" Margin="0,0,0,5" Height="28" Background="#1A1111" Foreground="OrangeRed"/>
+                    <Button Content="+ Emerging Threats" Click="AddFeed_Click" Tag="https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt" Margin="0,0,0,5" Height="28" Background="#1A1111" Foreground="OrangeRed"/>
+
+                    <TextBlock Text="WHITELISTS" Foreground="SpringGreen" Margin="0,15,0,5" FontWeight="Bold"/>
+                    <Button Content="🛡️ Game Stores" Click="AddFeed_Click" Tag="#WHITELIST_GAMING" Margin="0,0,0,5" Height="30" Background="#111A11" Foreground="SpringGreen"/>
+                    <Button Content="🛡️ Comms (Discord)" Click="AddFeed_Click" Tag="#WHITELIST_COMMS" Margin="0,0,0,5" Height="30" Background="#111A11" Foreground="SpringGreen"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Custom .txt file url/ ip" Foreground="Cyan" Margin="0,0,0,5" FontWeight="Bold"/>
+                    <TextBox x:Name="CustomIPBox" Height="320" AcceptsReturn="True" Background="#111" Foreground="Cyan" BorderBrush="#333" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="2">
+                <TextBox x:Name="LogBox" Height="150" IsReadOnly="True" Background="#050505" Foreground="#00FF00" FontSize="10" FontFamily="Consolas" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10"/>
+                <Button Content="ACTIVATE DADDY" Click="Activate_Click" HorizontalAlignment="Right" Width="200" Height="55" Background="Cyan" Foreground="Black" FontWeight="Bold"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
