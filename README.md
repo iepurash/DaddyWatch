@@ -8,10 +8,11 @@
 [![Architecture](https://img.shields.io/badge/Architecture-x64%20%7C%20ARM64-lightgrey)](#)
 [![Performance](https://img.shields.io/badge/CPU%20Impact-%3C%200.5%25-brightgreen)](#performance--optimization)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/iepuroi)
 
 **DaddyWatch** is an ultra-fast, lightweight, and modern network security monitor and active defense suite built natively for Windows. It provides kernel-level process socket attribution, multi-source threat intelligence matching, country-level geoblocking, and automated Windows Firewall mitigation—all wrapped in a sleek, zero-flicker Windows 11 Fluent dark interface.
 
-[Key Features](#-key-features) • [Why DaddyWatch?](#-why-is-it-fast--low-impact) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [Security Actions](#-security-actions)
+[Key Features](#-key-features) • [Why DaddyWatch?](#-why-is-it-fast--low-impact) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [Security Actions](#-security-actions) • [Support](#-support--donations)
 
 ---
 
@@ -20,39 +21,60 @@
 ## 🌟 Key Features
 
 ### 📡 1. Real-Time Socket & Process Attribution (Kernel P/Invoke)
-* **Full Process Attribution**: Leverages the Windows IP Helper API (`GetExtendedTcpTable` & `GetExtendedUdpTable`) to map every active socket to its exact **Process Name** (e.g. `chrome.exe`, `powershell.exe`, `svchost.exe`), **PID**, and full executable path.
-* **TCP & UDP Listener Monitoring**: Identifies active inbound listeners, established client connections, and ephemeral port states.
-* **Zero Screen Flickering**: Reconciles connections in place with key-based diffing. Selections, sorting, and scroll positions remain completely stable across 2-second scan intervals.
+- **Full Process Attribution**: Leverages the Windows IP Helper API (`GetExtendedTcpTable` & `GetExtendedUdpTable`) to map every active socket to its exact **Process Name** (e.g. `chrome.exe`, `powershell.exe`, `svchost.exe`), **PID**, and full executable path.
+
+- **TCP & UDP Listener Monitoring**: Identifies active inbound listeners, established client connections, and ephemeral port states.
+
+- **Zero Screen Flickering**: Reconciles connections in place with key-based diffing. Selections, sorting, and scroll positions remain completely stable across 2-second scan intervals.
+
 
 ### 🛡️ 2. Multi-Source Threat Intelligence Engine
-* **CIDR Subnet Matching**: High-speed bitwise interval matcher accurately evaluates subnet ranges (e.g. Cloudflare `/20` or Google ranges) and exact IPs.
-* **Domain & DNS Threat Matching**: Inspects both remote IP addresses and resolved hostnames against active threat feeds and malicious hostfiles (e.g. URLhaus malware distribution lists).
-* **Curated Allow & Block Feeds**: Preloaded with high-confidence threat feeds (Data-Shield, IPsum Level 3, FireHOL, Romain Marcoux) and enterprise cloud allowlists (Cloudflare, Google, GitHub Meta, Fastly CDN, Anycast DNS).
+- **CIDR Subnet Matching**: High-speed bitwise interval matcher accurately evaluates subnet ranges (e.g. Cloudflare `/20` or Google ranges) and exact IPs.
+
+- **Domain & DNS Threat Matching**: Inspects both remote IP addresses and resolved hostnames against active threat feeds and malicious hostfiles (e.g. URLhaus malware distribution lists).
+
+- **Curated Allow & Block Feeds**: Preloaded with high-confidence threat feeds (Data-Shield, IPsum Level 3, FireHOL, Romain Marcoux) and enterprise cloud allowlists (Cloudflare, Google, GitHub Meta, Fastly CDN, Anycast DNS).
+
 
 ### 🌍 3. Country Flags & Regional GeoBlocking
-* **Country Flag Badges**: Instant geographic lookup displays native flag emojis (🇺🇸, 🇩🇪, 🇷🇴, 🇬🇧, 🇯🇵, 🇨🇳, 🏠) and ISO codes for every public socket.
-* **1-Click Country GeoBlocking**: Block all ingress/egress traffic to/from entire countries (e.g. high-risk regions) with a single click. Geoblocked traffic is automatically classified as malicious.
-* **Visual Country Filter Grid**: Manage and toggle country-level rules with persistent local settings.
+- **Country Flag Badges**: Instant geographic lookup displays native flag emojis (🇺🇸, 🇩🇪, 🇷🇴, 🇬🇧, 🇯🇵, 🇨🇳, 🏠) and ISO codes for every public socket.
+
+- **1-Click Country GeoBlocking**: Block all ingress/egress traffic to/from entire countries (e.g. high-risk regions) with a single click. Geoblocked traffic is automatically classified as malicious.
+
+- **Visual Country Filter Grid**: Manage and toggle country-level rules with persistent local settings.
+
 
 ### 🌐 4. In-App Domain & DNS Inspector
-* **Right-Click Deep Dive**: Right-click any connection to inspect its domain in the built-in DNS Inspector.
-* **Real-Time Record Resolution**: Queries A, AAAA, and reverse PTR records, measuring round-trip latency in milliseconds.
-* **Bulk Firewall Blocking**: Isolate all resolved IPs of a suspicious domain in Windows Firewall simultaneously.
+- **Right-Click Deep Dive**: Right-click any connection to inspect its domain in the built-in DNS Inspector.
+
+- **Real-Time Record Resolution**: Queries A, AAAA, and reverse PTR records, measuring round-trip latency in milliseconds.
+
+- **Bulk Firewall Blocking**: Isolate all resolved IPs of a suspicious domain in Windows Firewall simultaneously.
+
 
 ### 🧱 5. Active Defense & Mitigation
-* **1-Click Windows Firewall Rules**: Instantly block malicious remote IPs in both inbound and outbound directions via native `netsh advfirewall`.
-* **Process Termination**: Kill rogue or suspicious processes by PID directly from the context menu (with protected-system process safeguards).
-* **⚠️ Emergency Panic Lockdown**: A one-click panic button immediately drops all non-system external connections and isolates the host in Windows Firewall.
-* **External Threat Intelligence**: Instant context menu lookups for **VirusTotal** (IP & Domain), **AbuseIPDB**, and **IPInfo.io**.
+- **1-Click Windows Firewall Rules**: Instantly block malicious remote IPs in both inbound and outbound directions via native `netsh advfirewall`.
+
+- **Process Termination**: Kill rogue or suspicious processes by PID directly from the context menu (with protected-system process safeguards).
+
+- **⚠️ Emergency Panic Lockdown**: A one-click panic button immediately drops all non-system external connections and isolates the host in Windows Firewall.
+
+- **External Threat Intelligence**: Instant context menu lookups for **VirusTotal** (IP & Domain), **AbuseIPDB**, and **IPInfo.io**.
+
 
 ### 📁 6. Custom Feed & File Importer (.txt / .json)
-* **Local File Ingestion**: Import custom blocklists or allowlists directly from `.txt` (plain IPs, CIDRs, hosts files) or `.json` formats (arrays or key-value objects).
-* **Persistent Local Cache**: Threat intelligence databases are saved locally at `%LocalAppData%\DaddyWatch\intel_cache.json` for instant offline protection on boot.
+- **Local File Ingestion**: Import custom blocklists or allowlists directly from `.txt` (plain IPs, CIDRs, hosts files) or `.json` formats (arrays or key-value objects).
+
+- **Persistent Local Cache**: Threat intelligence databases are saved locally at `%LocalAppData%\DaddyWatch\intel_cache.json` for instant offline protection on boot.
+
 
 ### 🔔 7. Windows Native Integration & Audit Trail
-* **Windows Toast Alerts**: Native desktop notifications when threats or geoblocked endpoints are intercepted (with intelligent rate-limiting to prevent spam).
-* **System Tray Minimization**: Sits quietly in the notification area with double-click window restore.
-* **Compliance CSV Export**: Export timestamped threat and network audit logs to `.csv` for diagnostic reporting.
+- **Windows Toast Alerts**: Native desktop notifications when threats or geoblocked endpoints are intercepted (with intelligent rate-limiting to prevent spam).
+
+- **System Tray Minimization**: Sits quietly in the notification area with double-click window restore.
+
+- **Compliance CSV Export**: Export timestamped threat and network audit logs to `.csv` for diagnostic reporting.
+
 
 ---
 
@@ -74,80 +96,3 @@ DaddyWatch was designed from the ground up to eliminate the bloat, battery drain
 ## 🏗️ Architecture
 
 DaddyWatch follows a clean **Model-View-ViewModel (MVVM)** pattern built on the `CommunityToolkit.Mvvm` framework:
-
-```
-DaddyWatch/
-├── Converters/
-│   └── ThreatConverters.cs       # Dynamic brushes, severity pills, and state tags
-├── Models/
-│   ├── NetworkConnection.cs      # Core observable socket model (PID, Geo, Threat)
-│   ├── ThreatFeed.cs             # Managed threat / allowlist feed metadata
-│   ├── ThreatLogEntry.cs         # Audit event model with formatted timestamps
-│   ├── BlockedFirewallRule.cs    # Active Windows Firewall rule model
-│   ├── CountryBlockItem.cs       # Geoblocking country toggle model
-│   ├── DnsInspectResult.cs       # Real-time DNS query & resolution model
-│   ├── GeoLocation.cs            # GeoIP & Flag Emoji generator
-│   └── ThreatLevel.cs            # Security assessment classification enum
-├── Services/
-│   ├── NativeNetworkService.cs   # Windows IP Helper API (P/Invoke GetExtendedTcpTable)
-│   ├── CidrMatcher.cs            # Binary search interval subnet matcher
-│   ├── DomainMatcher.cs          # Hierarchical domain & wildcard matcher
-│   ├── ThreatIntelligenceService.cs # Multi-feed compiler & persistent cache
-│   ├── FirewallService.cs        # Windows Firewall netsh orchestration & process killer
-│   ├── ReverseDnsService.cs      # Throttled async DNS resolver & query cache
-│   ├── GeoIpService.cs           # Microsecond offline GeoIP & Anycast heuristic engine
-│   ├── GeoBlockService.cs        # Regional country firewall & settings manager
-│   ├── NotificationService.cs    # Native Windows Toast debouncer & audio alerts
-│   └── SystemTrayService.cs      # Native Win32 Shell_NotifyIcon integration
-├── ViewModels/
-│   └── MainViewModel.cs          # Central coordinator with observable properties & commands
-├── MainWindow.xaml               # Windows 11 Fluent dark cyber console layout
-└── App.xaml                      # Global dark theme resources, styles, and control templates
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-* **Operating System**: Windows 10 (Build 19041+) or Windows 11
-* **Runtime**: [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0)
-
-### Building from Source
-
-1. **Click on releases, download the latest .zip, extract it, add an Antivirus Exclusion and you are good to go**:
-                                         **RUN AS ADMINISTRATOR!**
----
-
-## 🎯 Security Actions & Context Menu
-
-Right-click any row in the **Live Network Sockets** table to trigger targeted defense actions:
-
-| Action | Description |
-| :--- | :--- |
-| **🔍 Inspect Domain & DNS (In-App)** | Switches to the DNS Inspector and performs an immediate live lookup. |
-| **🚫 GeoBlock Entire Country** | Immediately blocks all traffic to and from the selected country. |
-| **🚫 Block Remote IP in Windows Firewall** | Adds bi-directional drop rules in Windows Firewall via `netsh`. |
-| **⚡ Terminate Process (Kill PID)** | Immediately terminates the offending process tree. |
-| **📂 Open Executable Location** | Opens File Explorer with the process executable selected. |
-| **🌐 Scan on VirusTotal** | Analyzes the remote IP or resolved domain on VirusTotal. |
-| **🔍 Inspect on AbuseIPDB** | Checks confidence of abuse score and reported blacklist history. |
-| **🗺️ Inspect on IPInfo.io** | Inspects ASN, ISP, and Autonomous System details. |
-| **📋 Copy Diagnostics** | Copies clean IP, resolved domain, or full diagnostic report to clipboard. |
-
----
-
-## 🔒 Privileges Note
-
-* **Standard User**: Can monitor all sockets, inspect domains, review threat intelligence, and receive alerts.
-* **Administrator**: Required for modifying Windows Firewall rules (`netsh advfirewall`) and terminating elevated system processes. Run DaddyWatch as Administrator for full active defense capabilities.
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
-<div align="center">
-<sub>Crafted with precision for high-performance Windows network defense.</sub>
-</div>
