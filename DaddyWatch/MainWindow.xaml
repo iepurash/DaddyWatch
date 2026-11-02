@@ -1,0 +1,753 @@
+<Window x:Class="DaddyWatch.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DaddyWatch.ViewModels"
+        Title="DaddyWatch 2026 - Endpoint Threat Defense &amp; Global Cyber Intelligence" 
+        Height="920" Width="1440" MinHeight="700" MinWidth="1150"
+        Background="{StaticResource BgDarkBrush}" 
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <!-- Top App Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- KPI Stats Summary Cards -->
+            <RowDefinition Height="Auto"/>
+            <!-- Main Content Tabs -->
+            <RowDefinition Height="*"/>
+            <!-- Bottom Status Footer -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- =================== HEADER =================== -->
+        <Border Grid.Row="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="10" Padding="18,12" Margin="0,0,0,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Brand / Logo -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="#1F6FEB" CornerRadius="8" Width="42" Height="42" Margin="0,0,12,0">
+                        <TextBlock Text="🛡️" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="DADDYWATCH" Foreground="#F0F6FC" FontSize="17" FontWeight="Black"/>
+                            <Border Background="#238636" CornerRadius="4" Padding="6,1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="ENTERPRISE 2026" Foreground="#FFFFFF" FontSize="9" FontWeight="Bold"/>
+                            </Border>
+                        </StackPanel>
+                        <TextBlock Text="GLOBAL THREAT RADAR &amp; ENDPOINT FIREWALL DEFENSE" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="SemiBold" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Center Health Banner -->
+                <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        Background="#0D1117" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" 
+                        CornerRadius="20" Padding="14,6">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse Width="10" Height="10" Margin="0,0,8,0" Fill="{Binding NetworkHealthBrush}"/>
+                        <TextBlock Text="{Binding NetworkHealthStatus}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Header Actions (Emergency Panic Button + Scanner + Sync) -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Panic Button -->
+                    <Button Command="{Binding EmergencyLockdownCommand}" ToolTip="Immediately sever all external connections and block active endpoints" Margin="0,0,8,0">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource ModernButtonStyle}">
+                                <Setter Property="Background" Value="#2E1014"/>
+                                <Setter Property="Foreground" Value="#FF453A"/>
+                                <Setter Property="BorderBrush" Value="#FF453A"/>
+                                <Setter Property="Content" Value="⚠️ PANIC LOCKDOWN"/>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding ToggleScanCommand}" Margin="0,0,8,0">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource ModernButtonStyle}">
+                                <Setter Property="Content" Value="⏸ PAUSE SCANNER"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsScanning}" Value="False">
+                                        <Setter Property="Content" Value="▶ START SCANNER"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource AccentGreenBrush}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource AccentGreenBrush}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Command="{Binding RefreshFeedsCommand}" Style="{StaticResource ModernPrimaryButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔄" Margin="0,0,6,0"/>
+                            <TextBlock Text="SYNC INTELLIGENCE"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- =================== KPI STATS CARDS =================== -->
+        <Grid Grid.Row="1" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Card 1: Active Sockets -->
+            <Border Grid.Column="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="ACTIVE SOCKETS" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ActiveConnectionsCount}" Foreground="{StaticResource AccentCyanBrush}" FontSize="24" FontWeight="Bold" Margin="0,2,0,0"/>
+                    <TextBlock Text="Real-time TCP &amp; UDP connections" Foreground="#6E7681" FontSize="10"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 2: Threats Detected -->
+            <Border Grid.Column="1" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="INTERCEPTED THREATS" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TotalThreatsFound}" Foreground="{StaticResource AccentRedBrush}" FontSize="24" FontWeight="Bold" Margin="0,2,0,0"/>
+                    <TextBlock Text="Malicious &amp; Geoblocked endpoints" Foreground="#6E7681" FontSize="10"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 3: Threat Database -->
+            <Border Grid.Column="2" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,8,0">
+                <StackPanel>
+                    <TextBlock Text="INTELLIGENCE DATABASE" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding MaliciousDbCount, StringFormat='{}{0:N0} Threats'}" Foreground="{StaticResource AccentAmberBrush}" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
+                    <TextBlock Text="{Binding TrustedDbCount, StringFormat='{}{0:N0} Verified Safe Endpoints'}" Foreground="{StaticResource AccentGreenBrush}" FontSize="10"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Card 4: Engine Status -->
+            <Border Grid.Column="3" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="14,10">
+                <StackPanel>
+                    <TextBlock Text="DEFENSE ENGINE" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                    <TextBlock Text="NATIVE API + GEOIP" Foreground="{StaticResource TextPrimaryBrush}" FontSize="18" FontWeight="Bold" Margin="0,4,0,0"/>
+                    <TextBlock Text="Kernel sockets &amp; Domain inspection • 2.0s" Foreground="#6E7681" FontSize="10"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- =================== MAIN TAB CONTENT =================== -->
+        <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTabIndex}" Background="Transparent" BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="tabBorder" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1,1,1,0" CornerRadius="8,8,0,0" Padding="16,8" Margin="0,0,4,0">
+                                    <ContentPresenter ContentSource="Header" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="tabBorder" Property="Background" Value="#21262D"/>
+                                        <Setter TargetName="tabBorder" Property="BorderBrush" Value="{StaticResource AccentCyanBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- TAB 0: LIVE CONNECTIONS -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📡" Margin="0,0,6,0"/>
+                        <TextBlock Text="Live Network Sockets" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <!-- Filter & Search Toolbar -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Connections DataGrid -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Filter Toolbar -->
+                    <Border Grid.Row="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="340"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Instant Search Box -->
+                            <TextBox Grid.Column="0" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource ModernTextBoxStyle}" 
+                                     ToolTip="Type IP, Port, Country, Process Name, Domain, or PID to filter instantly"/>
+
+                            <!-- Quick Filter Chips -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
+                                <Button Content="All" Command="{Binding SetFilterCommand}" CommandParameter="ALL" Style="{StaticResource FilterChipButtonStyle}"/>
+                                <Button Content="🚨 Threats Only" Command="{Binding SetFilterCommand}" CommandParameter="THREATS" Style="{StaticResource FilterChipButtonStyle}"/>
+                                <Button Content="⚠️ Unknown / External" Command="{Binding SetFilterCommand}" CommandParameter="UNTRUSTED" Style="{StaticResource FilterChipButtonStyle}"/>
+                                <Button Content="✅ Verified Safe" Command="{Binding SetFilterCommand}" CommandParameter="TRUSTED" Style="{StaticResource FilterChipButtonStyle}"/>
+                                <Button Content="Listening Ports" Command="{Binding SetFilterCommand}" CommandParameter="LISTENING" Style="{StaticResource FilterChipButtonStyle}"/>
+                            </StackPanel>
+
+                            <!-- Right Status Note -->
+                            <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Right-click for in-app DNS &amp; GeoBlock actions" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" FontStyle="Italic"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Connections DataGrid -->
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredConnections}" SelectedItem="{Binding SelectedConnection}"
+                              EnableRowVirtualization="True"
+                              VirtualizingStackPanel.IsVirtualizing="True"
+                              VirtualizingStackPanel.VirtualizationMode="Recycling"
+                              ScrollViewer.CanContentScroll="True">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="🔍 Inspect Domain &amp; DNS (In-App)" Command="{Binding InspectDnsFromConnectionCommand}"/>
+                                <MenuItem Header="🚫 GeoBlock Entire Country" Command="{Binding BlockSelectedCountryCommand}"/>
+                                <Separator Background="{StaticResource BorderDarkBrush}"/>
+                                <MenuItem Header="🚫 Block Remote IP in Windows Firewall" Command="{Binding BlockSelectedIpCommand}"/>
+                                <MenuItem Header="⚡ Terminate Process (Kill PID)" Command="{Binding TerminateSelectedProcessCommand}"/>
+                                <Separator Background="{StaticResource BorderDarkBrush}"/>
+                                <MenuItem Header="📂 Open Executable Location" Command="{Binding OpenFileLocationCommand}"/>
+                                <MenuItem Header="🌐 Scan Remote IP on VirusTotal" Command="{Binding OpenVirusTotalCommand}"/>
+                                <MenuItem Header="🌐 Scan Domain on VirusTotal" Command="{Binding OpenVirusTotalDomainCommand}"/>
+                                <MenuItem Header="🔍 Inspect on AbuseIPDB" Command="{Binding OpenAbuseIpDbCommand}"/>
+                                <MenuItem Header="🗺️ Inspect on IPInfo.io (Geo &amp; ASN)" Command="{Binding OpenIpInfoCommand}"/>
+                                <Separator Background="{StaticResource BorderDarkBrush}"/>
+                                <MenuItem Header="📋 Copy Remote IP Address" Command="{Binding CopySelectedIpCommand}"/>
+                                <MenuItem Header="📋 Copy Resolved Hostname" Command="{Binding CopyHostnameCommand}"/>
+                                <MenuItem Header="📋 Copy Complete Diagnostic Report" Command="{Binding CopyAllDetailsCommand}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                        <DataGrid.Columns>
+                            <!-- Country Flag & Code -->
+                            <DataGridTemplateColumn Header="Country" Width="85">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding CountryName}">
+                                            <TextBlock Text="{Binding FlagEmoji}" FontSize="13" Margin="0,0,6,0"/>
+                                            <TextBlock Text="{Binding CountryCode}" Foreground="{StaticResource TextSecondaryBrush}" FontWeight="Bold" FontSize="11"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Process & PID -->
+                            <DataGridTemplateColumn Header="Process / Application" Width="170">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border Background="#21262D" CornerRadius="4" Padding="5,2" Margin="0,0,8,0">
+                                                <TextBlock Text="{Binding ProcessId, StringFormat='{}{0}'}" Foreground="{StaticResource AccentCyanBrush}" FontSize="10" FontWeight="Bold"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding ProcessName}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" ToolTip="{Binding ProcessPath}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Protocol -->
+                            <DataGridTemplateColumn Header="Proto" Width="60">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#1C2128" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="4" Padding="4,2" HorizontalAlignment="Center">
+                                            <TextBlock Text="{Binding Protocol}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Local Endpoint -->
+                            <DataGridTextColumn Header="Local Socket" Binding="{Binding DisplayLocalEndpoint}" Width="145"/>
+
+                            <!-- Remote Endpoint -->
+                            <DataGridTemplateColumn Header="Remote Endpoint" Width="165">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayRemoteEndpoint}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" FontFamily="Consolas"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Reverse DNS Hostname -->
+                            <DataGridTemplateColumn Header="Resolved Hostname / Domain" Width="210">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ResolvedHostname, TargetNullValue='—'}" Foreground="{StaticResource TextSecondaryBrush}" TextTrimming="CharacterEllipsis" ToolTip="{Binding ResolvedHostname}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- TCP State -->
+                            <DataGridTemplateColumn Header="State" Width="105">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding State}" Foreground="{Binding State, Converter={StaticResource StateToBrushConverter}}" FontWeight="Bold" FontSize="11"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Threat Level Assessment Badge -->
+                            <DataGridTemplateColumn Header="Security Assessment" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Border Background="{Binding Threat, Converter={StaticResource ThreatToBgConverter}}" 
+                                                    BorderBrush="{Binding Threat, Converter={StaticResource ThreatToBrushConverter}}" 
+                                                    BorderThickness="1" CornerRadius="4" Padding="8,3" Margin="0,0,8,0">
+                                                <TextBlock Text="{Binding Threat}" Foreground="{Binding Threat, Converter={StaticResource ThreatToBrushConverter}}" FontWeight="Bold" FontSize="10"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding ThreatDetails}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 1: DOMAIN & DNS INSPECTOR -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🌐" Margin="0,0,6,0"/>
+                        <TextBlock Text="Domain &amp; DNS Inspector" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <!-- Lookup Input Card -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Lookup Result Details Card -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- DNS History Grid -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- DNS Query Toolbar -->
+                    <Border Grid.Row="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="LIVE DOMAIN RESOLUTION &amp; THREAT AUDITOR" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                                <TextBlock Text="Enter any domain, hostname, or IP address to resolve DNS records (A, AAAA, PTR) and test against all intelligence feeds:" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,8"/>
+                                <TextBox Text="{Binding DnsInspectTarget, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}" ToolTip="e.g. raw.githubusercontent.com, google.com, or 142.250.190.46"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Bottom" Margin="15,0,0,0">
+                                <Button Content="🔍 Inspect Domain &amp; DNS" Command="{Binding InspectDomainCommand}" Style="{StaticResource ModernPrimaryButtonStyle}" Height="36" Padding="18,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- DNS Result Details Panel -->
+                    <Border Grid.Row="1" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                                <TextBlock Text="QUERY TARGET &amp; STATUS" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding CurrentDnsResult.Target, FallbackValue='No active query'}" Foreground="{StaticResource TextPrimaryBrush}" FontSize="15" FontWeight="Bold" Margin="0,2,0,4"/>
+                                <TextBlock Text="{Binding CurrentDnsResult.Status, FallbackValue='Enter domain or IP above'}" Foreground="{StaticResource AccentCyanBrush}" FontSize="11"/>
+                                <TextBlock Text="{Binding CurrentDnsResult.ResponseTimeMs, StringFormat='{}Latency: {0} ms', FallbackValue='—'}" Foreground="#6E7681" FontSize="10" Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="CANONICAL NAME &amp; RESOLVED IP ADDRESSES" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding CurrentDnsResult.CanonicalName, FallbackValue='—'}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="13" Margin="0,2,0,4"/>
+                                <TextBlock Text="{Binding CurrentDnsResult.IpsFormatted, FallbackValue='—'}" Foreground="{StaticResource AccentGreenBrush}" FontFamily="Consolas" FontSize="12" TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                    <Border Background="{Binding CurrentDnsResult.Threat, Converter={StaticResource ThreatToBgConverter}, FallbackValue='#161B22'}" 
+                                            BorderBrush="{Binding CurrentDnsResult.Threat, Converter={StaticResource ThreatToBrushConverter}, FallbackValue='#30363D'}" 
+                                            BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="0,0,8,0">
+                                        <TextBlock Text="{Binding CurrentDnsResult.Threat, FallbackValue='IDLE'}" Foreground="{Binding CurrentDnsResult.Threat, Converter={StaticResource ThreatToBrushConverter}, FallbackValue='#8B949E'}" FontWeight="Bold" FontSize="10"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding CurrentDnsResult.ThreatDetails, FallbackValue=''}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <Button Content="🚫 Block Resolved IPs in Firewall" Command="{Binding BlockAllDnsIpsCommand}" Style="{StaticResource ModernButtonStyle}" Padding="12,8"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- DNS History Log Grid -->
+                    <Border Grid.Row="2" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="DNS QUERY AUDIT &amp; RESOLUTION HISTORY" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12" Margin="0,0,0,10"/>
+
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding DnsHistory}" EnableRowVirtualization="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Time" Binding="{Binding TimeFormatted}" Width="100"/>
+                                    <DataGridTextColumn Header="Target Query" Binding="{Binding Target}" Width="220"/>
+                                    <DataGridTextColumn Header="Canonical Hostname" Binding="{Binding CanonicalName}" Width="250"/>
+                                    <DataGridTextColumn Header="Resolved IP Addresses" Binding="{Binding IpsFormatted}" Width="250"/>
+                                    <DataGridTemplateColumn Header="Threat Assessment" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Background="{Binding Threat, Converter={StaticResource ThreatToBgConverter}}" 
+                                                            BorderBrush="{Binding Threat, Converter={StaticResource ThreatToBrushConverter}}" 
+                                                            BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="0,0,8,0">
+                                                        <TextBlock Text="{Binding Threat}" Foreground="{Binding Threat, Converter={StaticResource ThreatToBrushConverter}}" FontWeight="Bold" FontSize="10"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding ThreatDetails}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 3: GEOBLOCKER / COUNTRY FILTERS -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🛡️" Margin="0,0,6,0"/>
+                        <TextBlock Text="Country GeoBlocker" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="0,10,0,0">
+                    <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                                <TextBlock Text="REGIONAL &amp; COUNTRY-LEVEL TRAFFIC FIREWALL" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="Block all incoming and outgoing connections from specific geographic regions. Traffic matching blocked countries is instantly flagged as Malicious." Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                            </StackPanel>
+
+                            <!-- Country Tiles Wrap Grid -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding GeoBlockCountries}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#1C2128" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,10,10" Width="200">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Column="0" Text="{Binding FlagEmoji}" FontSize="18" VerticalAlignment="Center" Margin="0,0,8,0"/>
+
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding CountryName}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="11" TextTrimming="CharacterEllipsis"/>
+                                                        <TextBlock Text="{Binding CountryCode}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="9"/>
+                                                    </StackPanel>
+
+                                                    <CheckBox Grid.Column="2" IsChecked="{Binding IsBlocked}" 
+                                                              Command="{Binding DataContext.ToggleCountryBlockCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                              CommandParameter="{Binding}" 
+                                                              VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 4: THREAT FEEDS & REPOSITORIES -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📚" Margin="0,0,6,0"/>
+                        <TextBlock Text="Threat Feeds" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Feeds List -->
+                    <Border Grid.Column="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                                <TextBlock Text="MANAGED THREAT &amp; SAFE REPOSITORIES (IPs &amp; DOMAINS)" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="Regularly updated feeds covering critical malicious IPs, malware domains, and verified cloud edge infrastructures." Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                            </StackPanel>
+
+                            <ListBox Grid.Row="1" ItemsSource="{Binding Feeds}" Background="Transparent" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#1C2128" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,6">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <CheckBox Grid.Column="0" IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="{Binding Url}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="10" TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
+
+                                                <Border Grid.Column="2" Background="#21262D" CornerRadius="4" Padding="6,2" Margin="10,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Category}" Foreground="{StaticResource AccentCyanBrush}" FontSize="10"/>
+                                                </Border>
+
+                                                <TextBlock Grid.Column="3" Text="{Binding EntryCount, StringFormat='{}{0:N0} records'}" Foreground="{StaticResource AccentGreenBrush}" FontWeight="Bold" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+
+                    <!-- Feed Controls & Add Custom -->
+                    <StackPanel Grid.Column="1">
+                        <!-- File Upload / Import Card -->
+                        <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="📁 IMPORT LOCAL FILE (.TXT / .JSON)" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                                <TextBlock Text="Load your custom IP or domain lists from disk. Supports text blocklists, hosts files, or JSON arrays/objects:" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,10" TextWrapping="Wrap"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                    <RadioButton Content="Threat Blocklist" IsChecked="{Binding IsCustomFeedMalicious}" Foreground="{StaticResource AccentRedBrush}" Margin="0,0,15,0"/>
+                                    <RadioButton Content="Trusted Allowlist" Foreground="{StaticResource AccentGreenBrush}"/>
+                                </StackPanel>
+
+                                <Button Content="📂 Browse &amp; Import .txt / .json" Command="{Binding ImportFileCommand}" Style="{StaticResource ModernPrimaryButtonStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Add Custom Online Feed Card -->
+                        <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="ADD CUSTOM ONLINE FEED" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                                <TextBlock Text="Enter a public GitHub raw URL or HTTP blocklist:" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,8"/>
+
+                                <TextBox Text="{Binding CustomFeedUrl, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ModernTextBoxStyle}" Margin="0,0,0,10"/>
+
+                                <Button Content="➕ Add &amp; Compile URL Feed" Command="{Binding AddCustomFeedCommand}" Style="{StaticResource ModernButtonStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Compilation Status Card -->
+                        <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="INTELLIGENCE CACHE" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13" Margin="0,0,0,6"/>
+                                <TextBlock Text="Feeds are cached locally at %LocalAppData%\DaddyWatch so protection starts immediately upon launch." Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                <Button Content="🔄 Recompile All Active Feeds" Command="{Binding RefreshFeedsCommand}" Style="{StaticResource ModernButtonStyle}" Margin="0,0,0,8"/>
+                                <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource AccentCyanBrush}" FontSize="11" FontStyle="Italic"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 5: AUDIT LOGS & ALERTS -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🚨" Margin="0,0,6,0"/>
+                        <TextBlock Text="Threat Audit Log" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <!-- Log Toolbar -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Log DataGrid -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Log Toolbar -->
+                    <Border Grid.Row="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="REAL-TIME SECURITY EVENTS &amp; INTERCEPT AUDIT" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="12"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button Content="📄 Export to CSV" Command="{Binding ExportLogsToCsvCommand}" Style="{StaticResource ModernButtonStyle}" Margin="0,0,8,0"/>
+                                <Button Content="🗑️ Clear Logs" Command="{Binding ClearLogsCommand}" Style="{StaticResource ModernButtonStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Log DataGrid -->
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding ThreatLogs}" EnableRowVirtualization="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Timestamp" Binding="{Binding DateFormatted}" Width="150"/>
+                            <DataGridTemplateColumn Header="Severity" Width="95">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="4" Padding="6,2" HorizontalAlignment="Center">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#21262D"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Severity}" Value="CRITICAL">
+                                                            <Setter Property="Background" Value="#2E1014"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Severity}" Value="WARNING">
+                                                            <Setter Property="Background" Value="#2A240A"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Severity}" Value="SUCCESS">
+                                                            <Setter Property="Background" Value="#0F291E"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Severity}" FontWeight="Bold" FontSize="10">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{StaticResource AccentCyanBrush}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Severity}" Value="CRITICAL">
+                                                                <Setter Property="Foreground" Value="{StaticResource AccentRedBrush}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Severity}" Value="WARNING">
+                                                                <Setter Property="Foreground" Value="{StaticResource AccentAmberBrush}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Severity}" Value="SUCCESS">
+                                                                <Setter Property="Foreground" Value="{StaticResource AccentGreenBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Remote Endpoint" Binding="{Binding RemoteEndpoint}" Width="160"/>
+                            <DataGridTextColumn Header="Process" Binding="{Binding ProcessInfo}" Width="150"/>
+                            <DataGridTextColumn Header="Details &amp; Action" Binding="{Binding Message}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 6: FIREWALL DEFENSE -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🧱" Margin="0,0,6,0"/>
+                        <TextBlock Text="Firewall Isolation Rules" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Margin="0,10,0,0">
+                    <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                                <TextBlock Text="ACTIVE WINDOWS FIREWALL BLOCKED RULES" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="Rules registered through DaddyWatch to drop malicious ingress and egress traffic." Foreground="{StaticResource TextSecondaryBrush}" FontSize="11"/>
+                            </StackPanel>
+
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding BlockedRules}" EnableRowVirtualization="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Rule Name" Binding="{Binding RuleName}" Width="250"/>
+                                    <DataGridTextColumn Header="Blocked Remote IP" Binding="{Binding RemoteIp}" Width="180"/>
+                                    <DataGridTextColumn Header="Direction" Binding="{Binding Direction}" Width="120"/>
+                                    <DataGridTextColumn Header="Created" Binding="{Binding DateCreated, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150"/>
+                                    <DataGridTemplateColumn Header="Action" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="🔓 Unblock IP" Command="{Binding DataContext.UnblockIpCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding RemoteIp}" Style="{StaticResource ModernButtonStyle}" Padding="8,4"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- =================== FOOTER =================== -->
+        <Border Grid.Row="3" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" CornerRadius="8" Padding="14,8" Margin="0,14,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <CheckBox Content="Windows Toast Alerts" IsChecked="{Binding EnableToasts}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,20,0"/>
+                    <CheckBox Content="Audio Alerts" IsChecked="{Binding EnableAudioAlerts}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,20,0"/>
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" Text="DaddyWatch v2026.1 Enterprise Release • Active Protection" Foreground="#6E7681" FontSize="10" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
